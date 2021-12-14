@@ -59,13 +59,24 @@ void hidecursor()
 void setConsoleColour(unsigned short colour)
 {
 	static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	flush();
+	cout.flush();
 	SetConsoleTextAttribute(hOut, colour);
 }
 void setcursor(int x, int y)
 {
 	static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	flush();
+	cout.flush();
 	COORD coord = { (SHORT)x, (SHORT)y };
 	SetConsoleCursorPosition(hOut, coord);
+}
+vector<int> snake;
+bool food_eaten = 1, colour = 1, kids = 0, self_hit = 1, reverse_snake = 0;
+int width = 27, lenght = 118, food_x = -1, food_y = -2, hsc, time1 = 50;
+
+void initialise_snake() {
+	snake.clear();
+	for (int i = 0;i < 2;i++) {
+		snake.push_back(0);
+		snake.push_back(i);
+	}
 }
