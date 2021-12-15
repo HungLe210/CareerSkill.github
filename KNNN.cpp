@@ -80,3 +80,139 @@ void initialise_snake() {
 		snake.push_back(i);
 	}
 }
+void print_title(){
+	setcursor(0,0);
+	setConsoleColour(consoleforeground::DARKYELLOW);
+	cout<<"YOUR SCORE:                     ";
+	if(time1==20)		cout<<"HIGH";
+	else if(time1==50)	cout<<"MEDIUM";
+	else if(time1==80)	cout<<"LOW";
+	else 				{
+		cout<<"Custom: ";
+		setConsoleColour(consoleforeground::WHITE);
+		cout<<time1<<" ms";
+	}
+	cout<<"\n";
+	if(colour){
+		setConsoleColour(consolebackground::DARKGRAY);
+		for(int i=0;i<lenght+2;i++)
+		cout<<" ";
+		cout<<"\n";
+		for(int i=0;i<width;i++){
+			for(int j=0;j<lenght+2;j++){
+				if(j==0  || j==lenght+1)	setConsoleColour(consolebackground::DARKGRAY);
+				else	 					setConsoleColour(consolebackground::BLACK);
+				cout<<" ";
+			}
+			cout<<"\n";
+		}
+		setConsoleColour(consolebackground::DARKGRAY);
+		for(int i=0;i<lenght+2;i++)
+		cout<<" ";
+	}
+	else{
+		setConsoleColour(consoleforeground::DARKGRAY);
+		for(int i=0;i<lenght+2;i++)
+		cout<<"5";
+		cout<<"\n";
+		for(int i=0;i<width;i++){
+			for(int j=0;j<lenght+2;j++)
+				if(j==0)				cout<<"5";
+				else if(j==lenght+1)	cout<<"5";
+				else 					cout<<" ";	
+			cout<<"\n";
+		}
+		for(int i=0;i<lenght+2;i++)
+		cout<<"5";
+	}
+}
+void print_highscore(){
+	int i,j;
+	setcursor(11,0);
+	setConsoleColour(consoleforeground::WHITE);
+	cout<<snake.size()/2-3<<"  ";
+}
+void move_snake(int move,char direction){
+	int i,j;
+	if(direction=='v'){
+		snake.push_back(snake[snake.end()-2-snake.begin()]+move);
+		snake.push_back(snake[snake.end()-2-snake.begin()]);
+	}
+	else{
+		snake.push_back(snake[snake.end()-2-snake.begin()]);
+		snake.push_back(snake[snake.end()-2-snake.begin()]+move);
+	}
+	setcursor(snake[1]+1,snake[0]+2);
+	if(colour) 				setConsoleColour(consolebackground::BLACK);
+	cout<<" ";
+	snake.erase(snake.begin());
+	snake.erase(snake.begin());
+	if(snake.back()==lenght)										snake.back()-=lenght;	
+	else if(snake.back()==-1)										snake.back()+=lenght;
+	else if(snake[snake.end()-snake.begin()-2]==-1)					snake[snake.end()-snake.begin()-2]+=width;
+	else if(snake[snake.end()-snake.begin()-2]==width)				snake[snake.end()-snake.begin()-2]-=width;
+
+	setcursor(snake.back()+1,snake[snake.end()-snake.begin()-2]+2);
+	if(colour){
+		setConsoleColour(consolebackground::BLUE);
+		cout<<" ";
+	}
+	else{
+		setConsoleColour(consoleforeground::BLUE);
+		cout<<"O";
+	}
+	setcursor(snake[snake.end()-snake.begin()-3]+1,snake[snake.end()-snake.begin()-4]+2); 
+	if(colour){
+		setConsoleColour(consolebackground::BLUE);
+		cout<<" ";
+	}
+	else{
+		setConsoleColour(consoleforeground::BLUE);
+		cout<<"o";
+	}
+}
+void eat_food(){
+	food_x=rand()%(width);
+	food_y=rand()%(lenght);
+	setcursor(food_y+1,food_x+2);
+	if(colour){
+		setConsoleColour(consolebackground::BLUE);
+		cout<<" ";
+	}
+	else{
+		setConsoleColour(consoleforeground::BLUE);
+		cout<<"o";
+	} 
+	snake.insert(snake.begin(),snake[1]);
+	snake.insert(snake.begin(),snake[1]);
+}
+int print_final_message(){
+	setConsoleColour(consoleforeground::BLACK);
+	system("cls");
+	setConsoleColour(consoleforeground::RED);
+	int a=snake.size()/2-3,k;
+	if(a>hsc)
+	hsc=a;
+	cout<<"\n\n\n\n\n               GAME OVER\n";
+	cout<<"               YOUR SCORE: "<<snake.size()/2-3<<endl;
+	cout<<"               HIGH SCORE EVER: "<<hsc;
+	cout<<endl<<endl<<endl;
+	cout<<"               PRESS ANY KEY TO RESTART\n";
+	cout<<"               Press S to open settings\n";
+	cout<<"               esc to EXIT\n\n\n\n\n\n";
+	a=getch();
+	return a;
+}
+bool check_interbody_death(){
+	int x,y,i;
+	bool j=0;
+	x=snake[snake.end()-snake.begin()-2];
+	y=snake.back();						 
+	for(i=0;i<snake.size()-2;i=i+2){	 
+		if(x==snake[i] && y==snake[i+1]){
+			j=1;
+			break;
+		}
+	}
+	return j;
+}
