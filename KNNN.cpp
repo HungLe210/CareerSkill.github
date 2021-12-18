@@ -216,3 +216,118 @@ bool check_interbody_death(){
 	}
 	return j;
 }
+bool check_interbody_death() {//to check if snake died by touching its own body or not
+	int x, y, i;
+	bool j = 0;
+	x = snake[snake.end() - snake.begin() - 2];//x cordinate of snake mouth
+	y = snake.back();						 //y cordinate of snake mouth
+	for (i = 0; i < snake.size() - 2; i = i + 2) {	 //checking with body array
+		if (x == snake[i] && y == snake[i + 1]) {
+			j = 1;
+			break;
+		}
+	}
+	return j;
+}
+void pause_menu() {// to print pause menu
+	if (colour) {//colored
+		setcursor(1, (width - 5) / 2 + 2);
+		setConsoleColour(consolebackground::WHITE);
+		for (int i = 0; i < lenght; i++) 						cout << " ";
+		setcursor(1, (width - 5) / 2 + 3);
+		for (int i = 0; i < (lenght - 11) / 2; i++) 				cout << " ";
+		cout << "GAME PAUSED";
+		for (int i = 0; i < lenght - 11 - (lenght - 11) / 2; i++)		cout << " ";
+		setcursor(1, (width - 5) / 2 + 4);
+		for (int i = 0; i < lenght; i++) 						cout << " ";
+		setcursor(1, (width - 5) / 2 + 5);
+		for (int i = 0; i < (lenght - 21) / 2; i++) 				cout << " ";
+		cout << "PRESS 'P' TO CONTINUE";
+		for (int i = 0; i < lenght - 21 - (lenght - 21) / 2; i++) 		cout << " ";
+		setcursor(1, (width - 5) / 2 + 6);
+		for (int i = 0; i < lenght; i++) 						cout << " ";
+	}
+	else {//character
+		setConsoleColour(consoleforeground::WHITE);
+		setcursor((lenght - 9) / 2, (width - 1) / 2 + 1);
+		cout << "GAME PAUSED";
+		setcursor((lenght - 19) / 2, (width - 1) / 2 + 3);
+		cout << "PRESS 'P' TO CONTINUE";
+	}
+}
+void remove_pause() {// to remove th eprinted pausee menu
+	if (colour) {
+		setcursor(1, (width - 5) / 2 + 2);
+		setConsoleColour(consolebackground::BLACK);
+		for (int i = 0; i < 5; i++) {
+			setcursor(1, (width - 1) / 2 + i);
+			for (int j = 0; j < lenght; j++)					cout << " ";
+		}
+	}
+	else {
+		setcursor((lenght - 9) / 2, (width - 1) / 2 + 1);
+		cout << "         ";
+		setcursor((lenght - 19) / 2, (width - 1) / 2 + 3);
+		cout << "                     ";
+	}
+	setcursor(food_y + 1, food_x + 2);//printing food again, if food is below pause menu, then it would have become blank
+	if (colour) {
+		setConsoleColour(consolebackground::GREEN);
+		cout << " ";
+	}
+	else {
+		setConsoleColour(consoleforeground::GREEN);
+		cout << "o";
+	}
+}
+void settings() {//settings of game
+	system("cls");
+	setConsoleColour(consoleforeground::DARKYELLOW);
+	int a = 10, i, j;
+	cout << "\nEnter your choice seperated by spaces and press enter (1 1 -> changes mode to colour)\n\n";
+	setConsoleColour(consoleforeground::DARKYELLOW);
+	cout << "1. Choose Mode-\n";
+	setConsoleColour(consoleforeground::GRAY);
+	cout << "1. Colour    2. Characters \n\n";
+	setConsoleColour(consoleforeground::DARKYELLOW);
+	cout << "2. Choose Difficulty";
+	setConsoleColour(consoleforeground::DARKYELLOW);
+	cout << "1. Easy		2. Normal		3. Hard\n\n";
+	setConsoleColour(consoleforeground::DARKYELLOW);
+	cout << "3. Back\n\n";
+	setConsoleColour(consoleforeground::WHITE);
+	while (a != 7) {
+		cin >> a;	//taking choice number
+		if (a == 1) {
+			cin >> i;
+			if (i == 1)		colour = 1;
+			else if (i == 2)	colour = 0;
+			else			cout << "Enter correct choice\n";
+			cout << "Done succesfully\n";
+		}
+		else if (a == 2) {
+			cin >> i;
+			if (i == 1)		j = 80;
+			else if (i == 2)	j = 50;
+			else if (i == 3)	j = 20;
+			else if (i == 4)	cin >> j;
+			cout << "Done succesfully\n";
+		}
+		else if (a != 7)		cout << "Enter correct choice\n";
+	}
+}
+void welcome_to() {//printing welcome screen
+	system("cls");//clearing screen
+	setConsoleColour(consoleforeground::BLUE);
+	int a;
+	bool t = 1;
+	cout << "\n\n\n\n\n\n\n\n\n                                       WELCOME TO MY SNAKE GAME\n\n";
+	cout << "                         Press S to open settings, any other key to  continue\n";
+	cout << "                              During game, press 'P' to pause the game\n";
+	cout << "                               During game, press 'C' to end the game";
+	a = getch();
+	if (a == 115 || a == 83) {//detecting S or s to open settings
+		settings();
+		welcome_to();
+	}
+}
