@@ -280,3 +280,39 @@ void remove_pause() {// to remove th eprinted pausee menu
 		cout << "o";
 	}
 }
+void settings() {//settings of game
+	system("cls");
+	setConsoleColour(consoleforeground::DARKYELLOW);
+	int a = 10, i, j;
+	cout << "\nEnter your choice seperated by spaces and press enter (1 1 -> changes mode to colour)\n\n";
+	setConsoleColour(consoleforeground::DARKYELLOW);
+	cout << "1. Choose Mode-\n";
+	setConsoleColour(consoleforeground::GRAY);
+	cout << "1. Colour    2. Characters \n\n";
+	setConsoleColour(consoleforeground::DARKYELLOW);
+	cout << "2. Choose Difficulty";
+	setConsoleColour(consoleforeground::DARKYELLOW);
+	cout << "1. Easy		2. Normal		3. Hard\n\n";
+	setConsoleColour(consoleforeground::DARKYELLOW);
+	cout << "3. Back\n\n";
+	setConsoleColour(consoleforeground::WHITE);
+	while (a != 7) {
+		cin >> a;	//taking choice number
+		if (a == 1) {
+			cin >> i;
+			if (i == 1)		colour = 1;
+			else if (i == 2)	colour = 0;
+			else			cout << "Enter correct choice\n";
+			cout << "Done succesfully\n";
+		}
+		else if (a == 2) {
+			cin >> i;
+			if (i == 1)		j = 80;
+			else if (i == 2)	j = 50;
+			else if (i == 3)	j = 20;
+			else if (i == 4)	cin >> j;
+			cout << "Done succesfully\n";
+		}
+		else if (a != 7)		cout << "Enter correct choice\n";
+	}
+}
