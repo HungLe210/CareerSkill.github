@@ -316,3 +316,18 @@ void settings() {//settings of game
 		else if (a != 7)		cout << "Enter correct choice\n";
 	}
 }
+void welcome_to() {//printing welcome screen
+	system("cls");//clearing screen
+	setConsoleColour(consoleforeground::BLUE);
+	int a;
+	bool t = 1;
+	cout << "\n\n\n\n\n\n\n\n\n                                       WELCOME TO MY SNAKE GAME\n\n";
+	cout << "                         Press S to open settings, any other key to  continue\n";
+	cout << "                              During game, press 'P' to pause the game\n";
+	cout << "                               During game, press 'C' to end the game";
+	a = getch();
+	if (a == 115 || a == 83) {//detecting S or s to open settings
+		settings();
+		welcome_to();
+	}
+}
