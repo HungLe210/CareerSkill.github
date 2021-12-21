@@ -70,8 +70,8 @@ void setcursor(int x, int y)
 	SetConsoleCursorPosition(hOut, coord);
 }
 vector<int> snake;
-bool food_eaten = 1, colour = 1, kids = 0, self_hit = 1, reverse_snake = 0;
-int width = 27, lenght = 118, food_x = -1, food_y = -2, hsc, time1 = 50;
+bool food_eaten=1,colour=0,kids=1,self_hit=1,reverse_snake=0;
+int width=20,lenght=110,food_x=-1,food_y=-2,hsc,time1=50;
 
 void initialise_snake() {
 	snake.clear();
@@ -216,19 +216,6 @@ bool check_interbody_death(){
 	}
 	return j;
 }
-bool check_interbody_death() {//to check if snake died by touching its own body or not
-	int x, y, i;
-	bool j = 0;
-	x = snake[snake.end() - snake.begin() - 2];//x cordinate of snake mouth
-	y = snake.back();						 //y cordinate of snake mouth
-	for (i = 0; i < snake.size() - 2; i = i + 2) {	 //checking with body array
-		if (x == snake[i] && y == snake[i + 1]) {
-			j = 1;
-			break;
-		}
-	}
-	return j;
-}
 void pause_menu() {// to print pause menu
 	if (colour) {//colored
 		setcursor(1, (width - 5) / 2 + 2);
@@ -280,40 +267,40 @@ void remove_pause() {// to remove th eprinted pausee menu
 		cout << "o";
 	}
 }
-void settings() {//settings of game
+void settings(){//settings of game
 	system("cls");
 	setConsoleColour(consoleforeground::DARKYELLOW);
-	int a = 10, i, j;
-	cout << "\nEnter your choice seperated by spaces and press enter (1 1 -> changes mode to colour)\n\n";
+	int a=10,i,j;
+	cout<<"\nEnter your choice seperated by spaces and press enter (1 1 -> changes mode to colour)\n\n";
 	setConsoleColour(consoleforeground::DARKYELLOW);
-	cout << "1. Choose Mode-\n";
+	cout<<"1. Choose Mode-\n";
 	setConsoleColour(consoleforeground::GRAY);
-	cout << "1. Colour    2. Characters \n\n";
+	cout<<"1. Colour    2. Characters \n\n";
 	setConsoleColour(consoleforeground::DARKYELLOW);
-	cout << "2. Choose Difficulty";
+	cout<<"2. Choose Difficulty\n";
+	setConsoleColour(consoleforeground::GRAY);
+	cout<<"1. Easy		2. Normal		3. Hard\n\n";
 	setConsoleColour(consoleforeground::DARKYELLOW);
-	cout << "1. Easy		2. Normal		3. Hard\n\n";
-	setConsoleColour(consoleforeground::DARKYELLOW);
-	cout << "3. Back\n\n";
+	cout<<"3. Back\n\n";
 	setConsoleColour(consoleforeground::WHITE);
-	while (a != 7) {
-		cin >> a;	//taking choice number
-		if (a == 1) {
-			cin >> i;
-			if (i == 1)		colour = 1;
-			else if (i == 2)	colour = 0;
-			else			cout << "Enter correct choice\n";
-			cout << "Done succesfully\n";
+	while(a!=3){
+		cin>>a;	//taking choice number
+		if(a==1){
+			cin>>i;
+			if(i==1)		colour=1;
+			else if(i==2)	colour=0;
+			else			cout<<"Enter correct choice\n";
+			cout<<"Done succesfully\n";
+		}	
+		else if(a==2){
+			cin>>i;
+			if(i==1)		j=80;
+			else if(i==2)	j=50;
+			else if(i==3)	j=20;
+			else if(i==4)	cin>>j;
+			cout<<"Done succesfully\n";
 		}
-		else if (a == 2) {
-			cin >> i;
-			if (i == 1)		j = 80;
-			else if (i == 2)	j = 50;
-			else if (i == 3)	j = 20;
-			else if (i == 4)	cin >> j;
-			cout << "Done succesfully\n";
-		}
-		else if (a != 7)		cout << "Enter correct choice\n";
+		else if(a!=3)		cout<<"Enter correct choice\n";
 	}
 }
 void welcome_to() {//printing welcome screen
@@ -330,4 +317,57 @@ void welcome_to() {//printing welcome screen
 		settings();
 		welcome_to();
 	}
+}
+int main(){
+	cin.tie(NULL);
+	cout.tie(NULL);
+	srand(time(0));
+	hidecursor();
+	welcome_to();
+	restart_game:
+		food_eaten=1;
+		system("cls");
+		print_title();
+		initialise_snake();
+		eat_food();
+		int i1=80,i2=80;
+		while(i1!=99){
+			if(kbhit()){
+				i1=getch();
+				if(i1==72 && (i2!=80))				i2=i1,move_snake(-1,'v');
+				else if(i1==80 && (i2!=72))			i2=i1,move_snake(1,'v');
+				else if(i1==75 && (i2!=77))			i2=i1,move_snake(-1,'h');
+				else if(i1==77 && (i2!=75))			i2=i1,move_snake(1,'h');
+				else if(i1==112){//112- p
+					pause_menu();
+					while(1){
+						i1=getch();
+						if(i1==112)
+						break;
+					}
+					remove_pause();
+				}
+				else 								goto congo;
+			}
+			else{												
+				congo:
+				if(i2==72 )							move_snake(-1,'v');
+				else if(i2==80)						move_snake(1,'v');
+				else if(i2==75)						move_snake(-1,'h');
+				else if(i2==77)						move_snake(1,'h');
+			}
+			if(check_interbody_death()|| (i1==27))																												break;//body collision
+			if(food_y==snake.back() && food_x==snake[snake.end()-2-snake.begin()])																	eat_food();
+			print_highscore();
+			Sleep(time1);
+		}
+		int result;
+		print_final:
+			result=print_final_message();
+			if(result==115  || result==83){
+				settings();	
+				goto print_final;
+			}
+			else if(result!=27)
+				goto restart_game;
 }
